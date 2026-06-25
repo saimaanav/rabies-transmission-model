@@ -268,7 +268,7 @@ print(result.pareto)             # cost/deaths Pareto frontier (DataFrame)
 
 ### Interactive dashboard
 
-Launch `streamlit run app.py` and open the **🧠 ML Policy Optimizer** page from
+Launch `streamlit run app.py` and open the **ML Policy Optimizer** page from
 the sidebar to build the surrogate, inspect its accuracy and feature
 importances, and explore the cost/deaths Pareto frontier with a budget slider.
 
