@@ -1,6 +1,6 @@
 # Rabies Transmission Simulator & Policy Dashboard
 
-An agent-based model (ABM) for simulating rabies transmission dynamics between dog and human populations in urban environments, built with the [Mesa](https://mesa.readthedocs.io/) framework and visualized through an interactive [Streamlit](https://streamlit.io/) dashboard.
+An agent-based model (ABM) for simulating rabies transmission dynamics between dog and human populations in urban environments, built with the [Mesa](https://mesa.readthedocs.io/) framework and visualized through an interactive [Streamlit](https://streamlit.io/) dashboard. Recieved over $19k in compensation for model accruacy and insights.
 
 ## Table of Contents
 
