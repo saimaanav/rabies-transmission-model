@@ -1,6 +1,8 @@
 # Rabies Transmission Simulator & Policy Dashboard
 
-An agent-based model (ABM) for simulating rabies transmission dynamics between dog and human populations in urban environments, built with the [Mesa](https://mesa.readthedocs.io/) framework and visualized through an interactive [Streamlit](https://streamlit.io/) dashboard. Recieved over $19k in compensation for model accruacy and insights.
+A spatially explicit, stochastic agent-based model (ABM) of rabies transmission between free-roaming dogs and humans in Indian cities, built on [Mesa](https://mesa.readthedocs.io/) 3 and calibrated for Delhi and Kerala. A gradient-boosted surrogate trained on the ABM's outputs turns the simulator into a fast, budget-constrained policy optimizer, and an interactive [Streamlit](https://streamlit.io/) dashboard exposes both.
+
+Received over $19k in compensation for model accuracy and insights.
 
 ## Table of Contents
 
@@ -20,7 +22,11 @@ An agent-based model (ABM) for simulating rabies transmission dynamics between d
 
 ## Overview
 
-This project provides a spatially-explicit, stochastic agent-based simulation of rabies transmission in India's urban landscapes (with presets for **Delhi** and **Kerala**). It models individual dogs and humans as autonomous agents moving within a continuous 2D space, transmitting rabies through proximity-based bite events, and progressing through the **SEIRD** (Susceptible → Exposed → Infectious → Recovered → Dead) disease compartments.
+Dogs and humans are individual Mesa agents in a continuous 2D space. Each simulated day, every agent runs a fixed phase sequence: move (dogs random-walk within a roaming radius, humans are home-biased), infectious agents attempt bites on susceptible agents within a contact radius, then update disease state. A bite transmits with a configurable per-bite probability, and agents progress through the **SEIRD** compartments (Susceptible → Exposed → Infectious → Recovered → Dead). Rabies is always fatal in dogs. In humans, recovery requires PEP access and a successful Bernoulli draw on the PEP survival probability; otherwise the infection is fatal.
+
+The model is calibrated against reported human death counts, 22 in Kerala and 45+ in Delhi. Calibration uses a closed-form death estimator and a parameter-grid sweep (`parameter_tuning.py`), so candidate parameters are ranked without running a full simulation per point. Spatial scaling maps simulation units to real geography (Delhi 1,483 km², Kerala 38,863 km²).
+
+Full-scale runs take seconds to minutes, which rules out exhaustive policy search. The `ml/` package fits a surrogate to ABM outputs sampled with Latin-Hypercube designs over three policy levers (dog vaccination coverage, human PEP access, education-driven reduction in bite transmission). It then searches that surrogate for the lowest-mortality policy under a cost budget.
 
 ### Key Features
 
@@ -31,6 +37,8 @@ This project provides a spatially-explicit, stochastic agent-based simulation of
 - **Interactive Dashboard**: Real-time parameter tuning, simulation execution, and result visualization via Streamlit.
 - **Policy Analysis**: Pre-configured intervention scenarios with automated summary report generation.
 - **Reproducibility**: Optional random seed control for deterministic results.
+- **Calibration**: Analytical death estimator plus parameter-grid sweep to match reported Kerala and Delhi human death counts.
+- **Surrogate Policy Optimization**: Gradient-boosted regressors (300 trees, 5-fold cross-validated R²) trained on Latin-Hypercube ABM runs, searched over 20,000 candidate policies per budget to produce a cost/deaths Pareto frontier.
 
 ---
 
